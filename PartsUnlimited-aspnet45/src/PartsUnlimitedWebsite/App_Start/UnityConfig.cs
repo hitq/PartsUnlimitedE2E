@@ -1,28 +1,21 @@
-﻿using Microsoft.Practices.Unity;
-using PartsUnlimited.Models;
-using PartsUnlimited.ProductSearch;
-using PartsUnlimited.Recommendations;
-using PartsUnlimited.Utils;
+using Microsoft.Practices.Unity;
+using System.Web.Http;
+using Unity.WebApi;
 
 namespace PartsUnlimited
 {
-    public class UnityConfig
+    public static class UnityConfig
     {
-        public static UnityContainer BuildContainer()
+        public static void RegisterComponents()
         {
-            var container = new UnityContainer();
-
-            container.RegisterType<IPartsUnlimitedContext, PartsUnlimitedContext>();
-            container.RegisterType<IOrdersQuery, OrdersQuery>();
-            container.RegisterType<IRaincheckQuery, RaincheckQuery>();
-            container.RegisterType<IRecommendationEngine, AzureMLFrequentlyBoughtTogetherRecommendationEngine>();
-            container.RegisterType<ITelemetryProvider, TelemetryProvider>();
-            container.RegisterType<IProductSearch, StringContainsProductSearch>();
-            container.RegisterType<IShippingTaxCalculator, DefaultShippingTaxCalculator>();
-
-			container.RegisterInstance<IHttpClient>(container.Resolve<HttpClientWrapper>());
-
-            return container;
+			var container = new UnityContainer();
+            
+            // register all your components with the container here
+            // it is NOT necessary to register your controllers
+            
+            // e.g. container.RegisterType<ITestService, TestService>();
+            
+            GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }
     }
 }
